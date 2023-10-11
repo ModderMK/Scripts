@@ -1,8 +1,11 @@
 <!-- 
+    include '../oci_bind.php';
+    
     $bindings = [
         'bind_name' => $bind_value
     ];
-    $sql = bindValuesToQuery($query, $bindings, $conn_ora); 
+    $sql = bindValuesToQuery($query, $bindings, $conn_ora);
+    $valida = oci_execute($sql);
 -->
 <?php
     function bindValuesToQuery($query, $values, $connection) {
