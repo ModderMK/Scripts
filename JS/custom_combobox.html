@@ -2,41 +2,49 @@
 
 </head>
 <body>
-    <div class="col-custom" id="col_cd_catraca">
-        <span>Catraca:</span>
-        <div class="container-custom-combobox">
-            <div>
-                <input type="text" class="combo-search" id="combo_search_catraca" placeholder="Digite para pesquisar">
-                <div class="datalist-custom-combobox" id="catraca_list">
-                    <div class="option" data-value="1">Recepção</div>
-                    <div class="option" data-value="2">Portaria</div>
-                    <div class="option" data-value="3">Entrada</div>
-                </div>
-            </div>
+    <div class="container-custom-combobox">
+        <span class="main-text">Combo Box:</span>
+        <input type="text" class="combo-search main-text" id="combo_box_search" placeholder="Digite para pesquisar">
+        <div class="datalist-custom-combobox" id="combo_box_datalist">
+            <div class="option main-text" data-value="1">Entrada</div>
+            <div class="option main-text" data-value="2">Portaria</div>
+            <div class="option main-text" data-value="3">Portaria de Funcionários Internos e Prestadores de Serviço</div>
+            <div class="option main-text" data-value="4">Recepção</div>
         </div>
     </div>
 </body>
 
 <style>
+    .main-text{
+        font-family: "Open Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-style: normal;
+        font-variation-settings: "wdth" 100;
+    }
     .container-custom-combobox{
+        width: 20vw;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         position: relative;
     }
     .combo-search{
-        width: 99vw;
+        width: 100%;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
     }
     .datalist-custom-combobox{
         display: none;
-        max-height: 100px;
-        overflow-y: scroll;
+        max-height: 25vh;
+        overflow-y: auto;
         position: absolute;
         z-index: 10;
-        width: 99vw;
+        width: 100%;
         top: 100%;
         left: 0;
         background-color: white;
+        scrollbar-width: thin;
+        scrollbar-color: black gainsboro;
     }
     .col-custom{
         margin-right: 10px;
@@ -48,31 +56,35 @@
     .option{
         border-style: solid;
         border-width: 1px;
+        padding: 1px;
         text-align: center;
     }
 </style>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script>
-    const input_catraca = document.getElementById("combo_search_catraca");
-    const datalist_catraca = document.getElementById("catraca_list");
-    const options_catraca = datalist_catraca.querySelectorAll(".option");
-    let selectedCatracas = [];
+    const search_input = document.getElementById("combo_box_search");
+    const search_datalist = document.getElementById("combo_box_datalist");
+    const options_datalist = search_datalist.querySelectorAll(".option");
+    let selected_itens_datalist = [];
 
     document.addEventListener("click", function(event) {
-        if (event.target != input_catraca && event.target != datalist_catraca) {
-            datalist_catraca.style.display = "none";
+        if (event.target != search_input && event.target != search_datalist) {
+            search_datalist.style.display = "none";
         }else{
-            datalist_catraca.style.display = "block";
+            search_datalist.style.display = "block";
         }
     });
 
-    input_catraca.addEventListener("input", function() {
-        const input_catracaValue = input_catraca.value.toLowerCase();
+    search_input.addEventListener("input", function() {
+        const search_inputValue = search_input.value.toLowerCase();
 
-        options_catraca.forEach(option => {
-            const optionValueCatraca = option.innerHTML.toLowerCase();
-            if (optionValueCatraca.includes(input_catracaValue)) {
+        options_datalist.forEach(option => {
+            const optionValue = option.innerHTML.toLowerCase();
+            if (optionValue.includes(search_inputValue)) {
                 option.style.display = "block";
             } else {
                 option.style.display = "none";
@@ -80,25 +92,25 @@
         });
     });
 
-    options_catraca.forEach(option => {
+    options_datalist.forEach(option => {
         option.addEventListener("click", function() {
             event.stopPropagation();
-            const selectedValueCatraca = option.getAttribute("data-value");
-            if (!isSelectedCatraca(selectedValueCatraca)) {
-                selectedCatracas.push(selectedValueCatraca);
+            const selectedDatalistValue = option.getAttribute("data-value");
+            if (!isSelectedItem(selectedDatalistValue)) {
+                selected_itens_datalist.push(selectedDatalistValue);
                 option.style.backgroundColor = "LightBlue";
             }else{
-                const index = selectedCatracas.findIndex(item => item === selectedValueCatraca);
+                const index = selected_itens_datalist.findIndex(item => item === selectedDatalistValue);
                 if (index !== -1) {
-                    selectedCatracas.splice(index, 1);
+                    selected_itens_datalist.splice(index, 1);
                 }
                 option.style.backgroundColor = "white";
             }
         });
     });
 
-    function isSelectedCatraca(value) {
-        for (const item of selectedCatracas) {
+    function isSelectedItem(value) {
+        for (const item of selected_itens_datalist) {
             if (item == value) {
                 return true;
             }
